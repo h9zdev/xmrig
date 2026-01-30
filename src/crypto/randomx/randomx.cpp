@@ -201,6 +201,7 @@ static int scratchpadPrefetchMode = 1;
 void randomx_set_scratchpad_prefetch_mode(int mode)
 {
 	scratchpadPrefetchMode = mode;
+	RandomX_CurrentConfig.Apply();
 }
 
 void RandomX_ConfigurationBase::Apply()
@@ -255,6 +256,11 @@ void RandomX_ConfigurationBase::Apply()
 		case 3:
 			*a = 0x060C8B48UL; // mov rcx, [rsi+rax]
 			*b = 0x160C8B48UL; // mov rcx, [rsi+rdx]
+			break;
+
+		case 4:
+			*a = 0x060C0D0FUL; // prefetchw [rsi+rax]
+			*b = 0x160C0D0FUL; // prefetchw [rsi+rdx]
 			break;
 		}
 	}

@@ -62,7 +62,7 @@ static const std::array<MsrItems, kMsrArraySize> msrPresets = {
     MsrItems{{ 0xC0011020, 0x0004400000000000ULL }, { 0xC0011021, 0x0004000000000040ULL, ~0x20ULL }, { 0xC0011022, 0x8680000401570000ULL }, { 0xC001102b, 0x2040cc10ULL }},
     MsrItems{{ 0xC0011020, 0x0004400000000000ULL }, { 0xC0011021, 0x0004000000000040ULL, ~0x20ULL }, { 0xC0011022, 0x8680000401570000ULL }, { 0xC001102b, 0x2040cc10ULL }},
 
-    MsrItems{{ 0x1a4, 0xf }},
+    MsrItems{{ 0x1a4, 0xf }, { 0x1b0, 0 }},
     MsrItems()
 };
 
