@@ -94,7 +94,11 @@ xmrig::CpuWorker<N>::CpuWorker(size_t id, const CpuLaunchData &data) :
     else
 #   endif
     {
-        m_memory = new VirtualMemory(m_algorithm.l3() * N, data.hugePages, false, true, node(), VirtualMemory::kDefaultHugePageSize);
+        size_t extra = 0;
+        if (m_algorithm.family() == Algorithm::RANDOM_X) {
+            extra = 256 * 1024;
+        }
+        m_memory = new VirtualMemory(m_algorithm.l3() * N + extra, data.hugePages, false, true, node(), VirtualMemory::kDefaultHugePageSize);
     }
 
 #   ifdef XMRIG_ALGO_GHOSTRIDER
@@ -144,7 +148,15 @@ void xmrig::CpuWorker<N>::allocateRandomX_VM()
     if (!m_vm) {
         // Try to allocate scratchpad from dataset's 1 GB huge pages, if normal huge pages are not available
         uint8_t* scratchpad = m_memory->isHugePages() ? m_memory->scratchpad() : dataset->tryAllocateScrathpad();
-        m_vm = RxVm::create(dataset, scratchpad ? scratchpad : m_memory->scratchpad(), !m_hwAES, m_assembly, node());
+        if (!scratchpad) {
+            scratchpad = m_memory->scratchpad();
+        }
+
+        if (m_memory->isHugePages() && (m_algorithm.family() == Algorithm::RANDOM_X)) {
+            scratchpad += (id() % 8) * 32768;
+        }
+
+        m_vm = RxVm::create(dataset, scratchpad, !m_hwAES, m_assembly, node());
     }
     else if (!dataset->get() && (m_job.currentJob().seed() != m_seed)) {
         // Update RandomX light VM with the new seed

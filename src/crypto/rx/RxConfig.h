@@ -49,6 +49,7 @@ public:
         ScratchpadPrefetchT0,
         ScratchpadPrefetchNTA,
         ScratchpadPrefetchMov,
+        ScratchpadPrefetchW0,
         ScratchpadPrefetchMax,
     };
 

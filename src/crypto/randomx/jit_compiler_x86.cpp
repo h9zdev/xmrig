@@ -303,7 +303,7 @@ namespace randomx {
 		}
 		memcpy(code + epilogueOffset, codeEpilogue, epilogueSize);
 
-		codePosFirst = prologueSize + (hasXOP ? loopLoadXOPSize : loopLoadSize);
+		codePosFirst = (prologueSize + (hasXOP ? loopLoadXOPSize : loopLoadSize) + 63) & ~63;
 
 #		ifdef XMRIG_FIX_RYZEN
 		mainLoopBounds.first = code + prologueSize;
